@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  dev_db:
+    container_name: 'dev_db'
+    image: 'postgres'
+    environment:
+      POSTGRES_DB: 'dev_db'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - ./infrastructure/1-dev_db.sql:/docker-entrypoint-initdb.d/1-dev_db.sql
