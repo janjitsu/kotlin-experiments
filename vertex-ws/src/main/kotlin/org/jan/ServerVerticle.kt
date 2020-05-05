@@ -12,7 +12,7 @@ class ServerVerticle : CoroutineVerticle() {
         val port = 8080
         val router = Router.router(vertx)
         router.route().handler(BodyHandler.create())
-            router.post("/user").handler(UserAccountController.insertUser)
+        router.post("/user").handler(UserAccountController.insertUser)
 
         val httpServer = vertx.createHttpServer()
         httpServer
