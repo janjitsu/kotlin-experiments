@@ -1,0 +1,13 @@
+{
+  "server":{
+    "port": 8080
+  },
+  "database": {
+    "port": 5432,
+    "host": "172.19.0.2",
+    "database": "dev_db",
+    "user": "postgres",
+    "password": "postgres",
+    "poolsize": 5
+  }
+}

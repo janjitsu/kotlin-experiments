@@ -26,8 +26,6 @@ object UserAccountController {
                         UserAccountRepositoryVerticle.USER_ACCOUNT_REPOSITORY_INSERT,
                         routingContext.bodyAsJson
                 )
-
-                println(Thread.currentThread().getName())
                 response
                         .setStatusCode(201)
                         .setStatusMessage("Created")

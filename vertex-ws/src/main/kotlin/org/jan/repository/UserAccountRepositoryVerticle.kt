@@ -20,20 +20,20 @@ const val ERROR_ON_SAVING_USER_ACCOUNT = 1
 
 class UserAccountRepositoryVerticle : CoroutineVerticle() {
 
-    private val connectOptions = pgConnectOptionsOf(
-            port = 5432,
-            host = "172.19.0.2",
-            database = "dev_db",
-            user = "postgres",
-            password = "postgres"
-    )
-    // Pool options
-
-    // Pool options
-    private val poolOptions = poolOptionsOf()
-            .setMaxSize(5)
-
-    private fun getConn(vertx: Vertx) : PgPool = PgPool.pool(vertx, connectOptions, poolOptions)
+    private val conn: PgPool by lazy {
+        val databaseConfig: JsonObject = config.getJsonObject("database")
+        PgPool.pool(
+            vertx,
+            pgConnectOptionsOf(
+                port = databaseConfig.getInteger("port"),
+                host = databaseConfig.getString("host"),
+                database = databaseConfig.getString("database"),
+                user = databaseConfig.getString("user"),
+                password = databaseConfig.getString("password")
+            ),
+            poolOptionsOf().setMaxSize(databaseConfig.getInteger("poolsize"))
+        )
+    }
 
     override suspend fun start() {
         vertx.eventBus().consumer(USER_ACCOUNT_REPOSITORY_INSERT,createUserAccount)
@@ -44,7 +44,7 @@ class UserAccountRepositoryVerticle : CoroutineVerticle() {
             val userAccount: JsonObject = message.body()
 
             try {
-                getConn(vertx).preparedQueryAwait(
+                conn.preparedQueryAwait(
                         "INSERT INTO user_account (name, password, email) VALUES ($1, $2, $3)",
                         Tuple.of(
                                 userAccount.getString("name"),
