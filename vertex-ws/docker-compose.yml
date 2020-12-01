@@ -1,5 +1,10 @@
 version: '3.5'
 services:
+  vertex_ws:
+    container_name: 'vertex_ws'
+    build: .
+    ports:
+        - "9009:8080"
   dev_db:
     container_name: 'dev_db'
     image: 'postgres'

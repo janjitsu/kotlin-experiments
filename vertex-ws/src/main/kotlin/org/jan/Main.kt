@@ -27,7 +27,6 @@ suspend fun main() {
         )
     )
 
-
     vertx.deployVerticleAwait(
         ServerVerticle::class.java.name, deploymentOptionsOf(
             config = retriever.getConfigAwait()

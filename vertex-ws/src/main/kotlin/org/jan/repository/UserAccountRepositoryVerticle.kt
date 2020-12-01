@@ -37,12 +37,12 @@ class UserAccountRepositoryVerticle : CoroutineVerticle() {
 
     override suspend fun start() {
         vertx.eventBus().consumer(USER_ACCOUNT_REPOSITORY_INSERT,createUserAccount)
+        println("repository verticle listening on $USER_ACCOUNT_REPOSITORY_INSERT")
     }
 
     private val createUserAccount = Handler { message: Message<JsonObject> ->
         GlobalScope.launch(vertx.dispatcher()) {
             val userAccount: JsonObject = message.body()
-
             try {
                 conn.preparedQueryAwait(
                         "INSERT INTO user_account (name, password, email) VALUES ($1, $2, $3)",
