@@ -1,6 +1,5 @@
 package org.jan.controller
 
-import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
@@ -29,18 +28,16 @@ object UserAccountController {
                 response
                         .setStatusCode(201)
                         .setStatusMessage("Created")
-                        .write(Json.encodePrettily(userAccount.body()))
-                        .end()
+                        .end(Json.encodePrettily(userAccount.body()))
             } catch(e: Exception) {
                 response
                         .setStatusCode(400)
                         .setStatusMessage("Bad Request")
-                        .write(
+                        .end(
                                 jsonObjectOf(
                                     "message" to e.message
                                 ).toBuffer()
                         )
-                        .end()
             }
         }
     }

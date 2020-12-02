@@ -4,10 +4,9 @@ import io.vertx.config.ConfigRetriever
 import io.vertx.core.Vertx
 import io.vertx.kotlin.config.configRetrieverOptionsOf
 import io.vertx.kotlin.config.configStoreOptionsOf
-import io.vertx.kotlin.config.getConfigAwait
-import io.vertx.kotlin.core.deployVerticleAwait
 import io.vertx.kotlin.core.deploymentOptionsOf
 import io.vertx.kotlin.core.json.jsonObjectOf
+import io.vertx.kotlin.coroutines.await
 import org.jan.repository.UserAccountRepositoryVerticle
 
 
@@ -27,15 +26,15 @@ suspend fun main() {
         )
     )
 
-    vertx.deployVerticleAwait(
+    vertx.deployVerticle(
         ServerVerticle::class.java.name, deploymentOptionsOf(
-            config = retriever.getConfigAwait()
+            config = retriever.config.await()
         )
-    )
-    vertx.deployVerticleAwait(
+    ).await()
+    vertx.deployVerticle(
         UserAccountRepositoryVerticle::class.java.name,
         deploymentOptionsOf(
-            config = retriever.getConfigAwait()
+            config = retriever.config.await()
         )
-    )
+    ).await()
 }

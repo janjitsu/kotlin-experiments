@@ -1,14 +1,11 @@
 package org.jan.repository
 
 import io.vertx.core.Handler
-import io.vertx.core.Vertx
 import io.vertx.core.eventbus.Message
-import io.vertx.core.json.Json
 import io.vertx.core.json.JsonObject
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.dispatcher
 import io.vertx.kotlin.pgclient.pgConnectOptionsOf
-import io.vertx.kotlin.pgclient.preparedQueryAwait
 import io.vertx.kotlin.sqlclient.poolOptionsOf
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.Tuple
@@ -44,14 +41,14 @@ class UserAccountRepositoryVerticle : CoroutineVerticle() {
         GlobalScope.launch(vertx.dispatcher()) {
             val userAccount: JsonObject = message.body()
             try {
-                conn.preparedQueryAwait(
-                        "INSERT INTO user_account (name, password, email) VALUES ($1, $2, $3)",
+                conn.preparedQuery("INSERT INTO user_account (name, password, email) VALUES ($1, $2, $3)")
+                    .execute(
                         Tuple.of(
                                 userAccount.getString("name"),
                                 userAccount.getString("password"),
                                 userAccount.getString("email")
                         )
-                )
+                    )
                 message.reply(userAccount)
             } catch (e: Exception) {
                 message.fail(ERROR_ON_SAVING_USER_ACCOUNT, "message: " + e.message)
