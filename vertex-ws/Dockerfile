@@ -10,6 +10,7 @@ LABEL version="1.0"
 
 ENV NR_APP_NAME="movilepay-vertex-ws"
 ENV NR_LICENSE_KEY="d0598448142ea730672b4c6781042902FFFFNRAL"
+ENV JAEGER_SERVICE_NAME="movilepay-vertex-ws"
 
 WORKDIR /usr/src/app
 
